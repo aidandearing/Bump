@@ -1,0 +1,52 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
+Project("{C44447BA-EEAE-4F8E-AA46-8D6ABDACD98F}") = "Bump", "Assembly-CSharp-firstpass.csproj", "{2A885E4F-9112-E95E-0B32-9126608CDCE3}"
+EndProject
+Project("{C44447BA-EEAE-4F8E-AA46-8D6ABDACD98F}") = "Bump", "Assembly-CSharp.csproj", "{C50FA4ED-028F-78DD-5D8E-4BDB66401CB0}"
+EndProject
+Project("{C44447BA-EEAE-4F8E-AA46-8D6ABDACD98F}") = "Bump", "Assembly-CSharp-Editor.csproj", "{21E27A11-0E3B-4C0C-7FDD-E390C6F99B51}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2A885E4F-9112-E95E-0B32-9126608CDCE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A885E4F-9112-E95E-0B32-9126608CDCE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A885E4F-9112-E95E-0B32-9126608CDCE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A885E4F-9112-E95E-0B32-9126608CDCE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C50FA4ED-028F-78DD-5D8E-4BDB66401CB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C50FA4ED-028F-78DD-5D8E-4BDB66401CB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C50FA4ED-028F-78DD-5D8E-4BDB66401CB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C50FA4ED-028F-78DD-5D8E-4BDB66401CB0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21E27A11-0E3B-4C0C-7FDD-E390C6F99B51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21E27A11-0E3B-4C0C-7FDD-E390C6F99B51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21E27A11-0E3B-4C0C-7FDD-E390C6F99B51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21E27A11-0E3B-4C0C-7FDD-E390C6F99B51}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+																																																																																																									GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
+		Policies = $0
+		$0.TextStylePolicy = $1
+		$1.inheritsSet = null
+		$1.scope = text/x-csharp
+		$0.CSharpFormattingPolicy = $2
+		$2.inheritsSet = Mono
+		$2.inheritsScope = text/x-csharp
+		$2.scope = text/x-csharp
+		$0.TextStylePolicy = $3
+		$3.FileWidth = 120
+		$3.TabWidth = 4
+		$3.IndentWidth = 4
+		$3.EolMarker = Unix
+		$3.inheritsSet = Mono
+		$3.inheritsScope = text/plain
+		$3.scope = text/plain
+	EndGlobalSection
+
+EndGlobal
