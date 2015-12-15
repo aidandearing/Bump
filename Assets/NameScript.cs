@@ -20,8 +20,11 @@ public class NameScript : MonoBehaviour
         return Name;
     }
 
-    public void RandomName()
+    public void RandomName(bool isGirl)
     {
-        SetName(nameManager.names[Random.Range(0, nameManager.names.Length - 1)]);
+        if (isGirl)
+            SetName(nameManager.names[Random.Range(0, (nameManager.names.Length / 2) - 1)]);
+        else
+            SetName(nameManager.names[Random.Range((nameManager.names.Length / 2) - 1, nameManager.names.Length - 1)]);
     }
 }

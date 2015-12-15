@@ -37,6 +37,8 @@ public class ColourOnStart : MonoBehaviour
 
         myColour = (parent1 + parent2) / 2;
 
+        myColour = Mathf.Clamp(myColour, 0, colours.Length - 1);
+
         renderer.material = colours[myColour];
     }
 

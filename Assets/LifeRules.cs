@@ -3,11 +3,13 @@ using System.Collections;
 
 public class LifeRules : MonoBehaviour
 {
+    public static GameObject Player;
+
     public static int peopleCount;
     public const int PEOPLEMAX = 50;
 
-    public Rigidbody child;
-    public Rigidbody dead;
+    public GameObject child;
+    public GameObject dead;
     public static GameObject Obo;
     public GameObject soul;
 
@@ -30,9 +32,10 @@ public class LifeRules : MonoBehaviour
     private float reproductionCDtimer = 0;
 
     private bool isOld = false;
-    private bool hasMadeDead = false;
 
     private Vector3 originalScale;
+
+    private bool isGirl;
 
     // Use this for initialization
     void Start()
@@ -42,28 +45,17 @@ public class LifeRules : MonoBehaviour
 
         Vector3 scale = new Vector3(Random.Range(0.9f, 1.1f), Random.Range(0.9f, 1.1f), Random.Range(0.9f, 1.1f));
         originalScale = transform.localScale = new Vector3(transform.localScale.x * scale.x, transform.localScale.y * scale.y, transform.localScale.z * scale.z);
-
-        NameScript name = GetComponent<NameScript>();
-        if (name.GetName() == "")
-        {
-            name.RandomName();
-        }
-
-        peopleCount++;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (lifeElapsed / lifeGoal <= reproductionAgeLimit)
-            lifeElapsed += Time.deltaTime * numAround;
-        else
+        if (lifeElapsed / lifeGoal >= reproductionAgeLimit)
             lifeElapsed += Time.deltaTime / numAround;
 
         if ((Obo.transform.position - transform.position).magnitude <= 20)
             lifeElapsed += Time.deltaTime * oboAgeMult;
 
-        reproductionCDtimer += Time.deltaTime;
         ageCheckElapsed += Time.deltaTime;
 
         transform.localScale = originalScale * (1 - (lifeElapsed / lifeGoal / 8));
@@ -82,29 +74,44 @@ public class LifeRules : MonoBehaviour
 
         if (lifeElapsed / lifeGoal <= reproductionAgeLimit)
         {
+            reproductionCDtimer += Time.deltaTime;
 
-            GameObject obj = BehaviourUtil.NearestObjectByTag(gameObject, "Player", reproductionRange);
-
-            if (obj != null && obj.GetComponent<LifeRules>() != null && obj.GetComponent<GrowUp>() == null)
+            if (isGirl)
             {
-                if (!obj.GetComponent<LifeRules>().isOld)
+                ArrayList objs = BehaviourUtil.SurroundingObjectsByTag(gameObject, "Player", reproductionRange);
+
+                if (objs != null)
                 {
-                    Vector3 delta = obj.transform.position - transform.position;
+                    bool canReproduce = false;
+                    GameObject obj = null;
 
-                    if (reproductionCDtimer >= reproductionCooldown)
+                    foreach (GameObject adult in objs)
                     {
-                        reproductionCounter += Time.deltaTime;
-
-                        if (reproductionCounter >= reproductionTime)
+                        LifeRules other = adult.GetComponent<LifeRules>();
+                        if (other != null)
                         {
-                            if (peopleCount < PEOPLEMAX)
+                            if (!other.isGirl && !other.isOld)
                             {
-                                child.GetComponent<ColourOnStart>().ApplyColour(obj.GetComponent<ColourOnStart>().myColour, GetComponent<ColourOnStart>().myColour);
-                                if (child != null)
+                                canReproduce = true;
+                                obj = adult;
+                            }
+                        }
+                    }
+
+                    if (canReproduce)
+                    {
+                        if (reproductionCDtimer >= reproductionCooldown)
+                        {
+                            reproductionCounter += Time.deltaTime;
+
+                            if (reproductionCounter >= reproductionTime)
+                            {
+                                if (peopleCount < PEOPLEMAX)
                                 {
-                                    //child.GetComponent<ColourOnStart>().ApplyColour(obj.GetComponent<ColourOnStart>().myColour, GetComponent<ColourOnStart>().myColour);
-                                    child.transform.localScale = (transform.localScale + obj.transform.localScale) / 2;
-                                    Instantiate(child, transform.position + delta / 2, new Quaternion());
+                                    Vector3 delta = obj.transform.position - transform.position;
+                                    GameObject baby = Instantiate(child, transform.position + delta / 2, new Quaternion()) as GameObject;
+                                    baby.transform.localScale = (transform.localScale + obj.transform.localScale) / 2;
+                                    baby.GetComponent<ColourOnStart>().ApplyColour(obj.GetComponent<ColourOnStart>().myColour + Random.Range(-1, 1), GetComponent<ColourOnStart>().myColour + Random.Range(-1, 1));
                                 }
                                 reproductionCounter -= Random.Range(reproductionTime / 2, reproductionTime * 1.5f);
                                 reproductionCDtimer -= Random.Range(reproductionCooldown / 2, reproductionCooldown * 1.5f);
@@ -125,25 +132,37 @@ public class LifeRules : MonoBehaviour
 
             if (lifeElapsed >= lifeGoal)
             {
-                if (hasMadeDead)
-                {
-                    peopleCount--;
-                    Destroy(gameObject);
-                }
-                else
-                {
-                    hasMadeDead = true;
-                    dead.transform.localScale = transform.localScale;
-                    Instantiate(dead, transform.position, new Quaternion());
+                dead.transform.localScale = transform.localScale;
+                Instantiate(dead, transform.position, new Quaternion());
 
-                    if ((Obo.transform.position - transform.position).magnitude <= 10)
-                    {
-                        Quaternion look = transform.rotation;
-                        look.SetLookRotation(transform.position + new Vector3(0, 1000, 0));
-                        Instantiate(soul, transform.position, look);
-                    }
+                if ((Obo.transform.position - transform.position).magnitude <= 10)
+                {
+                    Quaternion look = new Quaternion();
+                    look.SetLookRotation(Player.transform.position - transform.position + new Vector3(0, 1000, 0));
+                    Instantiate(soul, transform.position, look);
                 }
+
+                peopleCount--;
+                Destroy(gameObject);
             }
         }
+    }
+
+    /// <summary>
+    /// Gets the gender of this adult
+    /// </summary>
+    /// <returns>true if girl false if boy</returns>
+    public bool GetGender()
+    {
+        return isGirl;
+    }
+
+    /// <summary>
+    /// Sets the gender of this adult
+    /// </summary>
+    /// <param name="gender">True for girl false for boy</param>
+    public void SetGender(bool gender)
+    {
+        isGirl = gender;
     }
 }

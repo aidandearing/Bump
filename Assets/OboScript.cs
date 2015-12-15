@@ -153,16 +153,30 @@ public class OboScript : MonoBehaviour
 
     void SetTarget()
     {
-        GameObject obj;
 
-        obj = BehaviourUtil.NearestObjectByTag(gameObject, tag, checkRadius);
+        //ArrayList objs = BehaviourUtil.SurroundingObjectsByTag(gameObject, tag, checkRadius);
+        GameObject obj = BehaviourUtil.NearestObjectByTag(gameObject, tag, checkRadius);
 
+        //if (objs == null)
         if (obj == null)
         {
-            Target = Vector3.zero;
+            Target = Player.transform.position;
         }
         else
         {
+            //if ((Player.transform.position - transform.position).magnitude < checkRadius)
+            //{
+            //    foreach (GameObject obj in objs)
+            //    {
+            //        if (obj != Player)
+            //        {
+            //            Target = obj.transform.position;
+            //            break;
+            //        }
+            //    }
+            //}
+            //else
+            //    Target = BehaviourUtil.NearestObjectByTag(gameObject, tag, checkRadius).transform.position;
             Target = obj.transform.position;
         }
     }

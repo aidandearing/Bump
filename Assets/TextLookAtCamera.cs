@@ -13,5 +13,6 @@ public class TextLookAtCamera : MonoBehaviour
     void Update()
     {
         transform.rotation = Quaternion.LookRotation(transform.position - Camera.main.transform.position);
+        transform.localScale = Vector3.one * Mathf.Clamp((Camera.main.transform.position - transform.position).magnitude / 50, 0.1f, Mathf.Infinity);
     }
 }

@@ -13,6 +13,7 @@ public class PlayerBehaviour : MonoBehaviour
     {
         OboScript.Player = gameObject;
         SoulScript.Player = gameObject;
+        LifeRules.Player = gameObject;
     }
 
     // Update is called once per frame

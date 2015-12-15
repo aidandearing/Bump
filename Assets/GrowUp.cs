@@ -3,7 +3,7 @@ using System.Collections;
 
 public class GrowUp : MonoBehaviour
 {
-    public Rigidbody adult;
+    public GameObject adult;
 
     public float lifespan = 60;
 
@@ -12,6 +12,8 @@ public class GrowUp : MonoBehaviour
 
     private Vector3 goalScale;
     private Vector3 startScale;
+
+    private bool isGirl;
     // Use this for initialization
     void Start()
     {
@@ -23,8 +25,10 @@ public class GrowUp : MonoBehaviour
         NameScript name = GetComponent<NameScript>();
         if (name.GetName() == "")
         {
-            name.RandomName();
+            name.RandomName(isGirl);
         }
+
+        LifeRules.peopleCount++;
     }
 
     // Update is called once per frame
@@ -36,9 +40,10 @@ public class GrowUp : MonoBehaviour
 
         if (lifeElapsed >= lifeGoal)
         {
-            adult.GetComponent<ColourOnStart>().ApplyColour(GetComponent<ColourOnStart>().myColour, GetComponent<ColourOnStart>().myColour);
-            Instantiate(adult, transform.position, new Quaternion());
-            adult.GetComponent<NameScript>().SetName(GetComponent<NameScript>().GetName());
+            GameObject grownSelf = Instantiate(adult, transform.position, new Quaternion()) as GameObject;
+            grownSelf.GetComponent<NameScript>().SetName(GetComponent<NameScript>().GetName());
+            grownSelf.GetComponent<ColourOnStart>().ApplyColour(GetComponent<ColourOnStart>().myColour, GetComponent<ColourOnStart>().myColour);
+            grownSelf.GetComponent<LifeRules>().SetGender(isGirl);
             Destroy(gameObject);
         }
     }
@@ -46,5 +51,23 @@ public class GrowUp : MonoBehaviour
     public void InstantlyGrow()
     {
         lifeElapsed = lifeGoal;
+    }
+
+    /// <summary>
+    /// Gets the gender of this adult
+    /// </summary>
+    /// <returns>true if girl false if boy</returns>
+    public bool GetGender()
+    {
+        return isGirl;
+    }
+
+    /// <summary>
+    /// Sets the gender of this adult
+    /// </summary>
+    /// <param name="gender">True for girl false for boy</param>
+    public void SetGender(bool gender)
+    {
+        isGirl = gender;
     }
 }

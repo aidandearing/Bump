@@ -6,8 +6,6 @@ public class Shrivel : MonoBehaviour
     public float shrivelTime = 10;
     public float shrivelStart = 7.5f;
 
-    private Vector3 startScale;
-
     private float shrivelGoal = 0;
     private float shrivelElapsed = 0;
 
@@ -15,7 +13,6 @@ public class Shrivel : MonoBehaviour
     void Start()
     {
         shrivelGoal = shrivelTime;
-        startScale = transform.localScale;
     }
 
     // Update is called once per frame
@@ -23,11 +20,17 @@ public class Shrivel : MonoBehaviour
     {
         shrivelElapsed += Time.deltaTime;
 
-        float percent = (shrivelElapsed - shrivelStart) / (shrivelGoal - shrivelStart);
+        if (shrivelElapsed >= shrivelStart)
+        {
+            GetComponent<Collider>().isTrigger = false;
+            Collider[] colliders = GetComponentsInChildren<Collider>();
+            foreach (Collider collide in colliders)
+            {
+                collide.isTrigger = true;
+            }
+        }
 
-        transform.localScale = Vector3.Lerp(startScale, Vector3.zero, percent);
-
-        if (percent >= 1)
+        if (shrivelElapsed >= shrivelGoal)
             Destroy(gameObject);
     }
 }
